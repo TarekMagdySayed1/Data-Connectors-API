@@ -1,0 +1,10 @@
+flask 
+requests
+datetime
+PureCloudPlatformClientV2
+pandas
+zipfile
+pandasql
+freshdesk
+json
+
