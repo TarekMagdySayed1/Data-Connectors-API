@@ -11,7 +11,7 @@ from freshdeskv5 import API
 from appsflyer import AppsFlyerApi
 from Genesys import KPIs
 from Genesys import upload
-
+import os
 
 #freshchatKey = os.environ['FreshChat_KEY']
 
@@ -19,7 +19,6 @@ from Genesys import upload
 #from flask_ngrok import run_with_ngrok
 
 def get_interval_string_fresh(follow):
-        """Function takes no paramters and returns an time interval in json format"""
         if follow == 0:
             yesterday = datetime.now() - timedelta(0)
             s = datetime.now() - timedelta(1)
@@ -28,7 +27,6 @@ def get_interval_string_fresh(follow):
             s = datetime.now() - timedelta(2)
         return yesterday.strftime('%Y-%m-%d') + 'T22:00:00.000Z' , s.strftime('%Y-%m-%d') + 'T22:00:00.000Z'
 def get_interval_string_apps(follow):
-        """Function takes no paramters and returns an time interval in json format"""
         if follow == 0:
             yesterday = datetime.now() - timedelta(0)
             
@@ -38,22 +36,25 @@ def get_interval_string_apps(follow):
         return yesterday.strftime('%Y-%m-%d')
 
 def get_interval_string_freshdesk(follow):
-    """Function takes no paramters and returns an time interval in json format"""
     if follow == 'Today':
         yesterday = datetime.now() - timedelta(0)
         s = datetime.now() - timedelta(1)
         r = datetime.now() - timedelta(2)
     if follow == 'Yesterday':
-        yesterday = datetime.now() - timedelta(18)
-        s = datetime.now() - timedelta(19)
-        r = datetime.now() - timedelta(20)
+        yesterday = datetime.now() - timedelta(1)
+        s = datetime.now() - timedelta(2)
+        r = datetime.now() - timedelta(3)
     
     return yesterday.strftime('%Y-%m-%d') + 'T22:00:00.000Z' , s.strftime('%Y-%m-%d') + 'T22:00:00.000Z', r.strftime('%Y-%m-%d') + 'T22:00:00.000Z'
 
 z,y,x = get_interval_string_freshdesk('Yesterday')
 yesterday = get_interval_string_apps(1)
-Freshdesk_URL = 'https://moneyfellows.freshchat.com/v2/reports/raw/'
-Freshdesk_Key = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJpS216TTVkenRIWmprdmdSY3VrVHgxTzJ2SFlTM0U5YmVJME9XbXRNR1ZzIn0.eyJqdGkiOiI1MDMyNDYxMS0yZjViLTRjOWEtOGYxNS1kY2JlM2RiNjU2OTMiLCJleHAiOjE5MjI4MDk3NjAsIm5iZiI6MCwiaWF0IjoxNjA3NDQ5NzYwLCJpc3MiOiJodHRwOi8vaW50ZXJuYWwtZmMtdXNlMS0wMC1rZXljbG9hay1vYXV0aC0xMzA3MzU3NDU5LnVzLWVhc3QtMS5lbGIuYW1hem9uYXdzLmNvbS9hdXRoL3JlYWxtcy9wcm9kdWN0aW9uIiwiYXVkIjoiMjVkMGNiNWEtZTRiMy00Yzk3LWE0MGUtMzcxNWQ4OWVjYTFiIiwic3ViIjoiOWRlNTc2ODctZDFhNC00ODQ4LTgyYjQtYTIzZDUwODllZDM5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiMjVkMGNiNWEtZTRiMy00Yzk3LWE0MGUtMzcxNWQ4OWVjYTFiIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiOTI5NzMyYWUtYmEzMS00ZWE5LWJmZGItZjYwNDczNzI0ZGUzIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6W10sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJhZ2VudDp1cGRhdGUgYWdlbnQ6Y3JlYXRlIG1lc3NhZ2U6Y3JlYXRlIG1lc3NhZ2U6Z2V0IHVzZXI6ZGVsZXRlIGZpbHRlcmluYm94OmNvdW50OnJlYWQgdXNlcjp1cGRhdGUgcm9sZTpyZWFkIGltYWdlOnVwbG9hZCBiaWxsaW5nOnVwZGF0ZSByZXBvcnRzOmV4dHJhY3QgY29udmVyc2F0aW9uOnJlYWQgZGFzaGJvYXJkOnJlYWQgcmVwb3J0czpleHRyYWN0OnJlYWQgcmVwb3J0czpyZWFkIGFnZW50OnJlYWQgZmlsdGVyaW5ib3g6cmVhZCBjb252ZXJzYXRpb246dXBkYXRlIGNvbnZlcnNhdGlvbjpjcmVhdGUgYWdlbnQ6ZGVsZXRlIG91dGJvdW5kbWVzc2FnZTpnZXQgb3V0Ym91bmRtZXNzYWdlOnNlbmQgdXNlcjpjcmVhdGUgcmVwb3J0czpmZXRjaCB1c2VyOnJlYWQiLCJjbGllbnRIb3N0IjoiMTkyLjE2OC4xMjkuMjQ5IiwiY2xpZW50SWQiOiIyNWQwY2I1YS1lNGIzLTRjOTctYTQwZS0zNzE1ZDg5ZWNhMWIiLCJjbGllbnRBZGRyZXNzIjoiMTkyLjE2OC4xMjkuMjQ5In0.ooPrVJ2e_ljLbQYm5Vu7TxickrrZjXXtPi0ciUMhB12O-3xow7B5iDJEmM5l_H5RK9iSXwhZQTOg5TEYoSwJ5vDH4sh1n5iE53ATCqIUMWdH-p0Xv5TsJXI9B7avVBAL9ZRJuv5KwCIMV_kr5F91b2bBOKbp3UwCFlGPJCNUSblBZEsxvkRK01-2Vk0xkMJglGRIosJ4HqHjL5UqFZtNRl6QWqSEO0pcGKG7VtVG85mK3NYcVhhsNnNYZ106W3bdIbaP_JNU_yDhiPiqpaBbkypXvxRVI9F5yZ5xNQeNjf9vXBV4HpcDiK6Dz9piF7SZzGz3-DVoC0i2MpT90Yf6tw'
+Freshchat_URL = os.environ['Freshchat_url']
+Freshchat_Key = os.environ['Freshchat_key']
+Freshdesk_URL = os.environ['Freshdesk_URL']
+Freshdesk_Key = os.environ['Freshdesk_Key']
+Appsflyer_url = os.environ['AppsFlyer_URL']
+Appsflyer_key = os.environ['AppsFlyer_Key']
 
 
 application = Flask(__name__)
@@ -64,7 +65,7 @@ def home():
 
 @application.route('/freshdesk/Tickets')
 def Tickets():
-    a = API('moneyfellows.freshdesk.com', 'oH1IwmqZS7xH6tdGlW4p')
+    a = API(Freshdesk_URL, Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.tickets.list_tickets(filter_name=None, updated_since= z)
@@ -84,7 +85,7 @@ def Tickets():
 
 @application.route('/freshdesk/Contacts')
 def Contacts():
-    a = API('moneyfellows.freshdesk.com', 'oH1IwmqZS7xH6tdGlW4p')
+    a = API(Freshdesk_URL, Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.contacts.list_contacts(filter_name=None, _updated_since= x)
@@ -104,7 +105,7 @@ def Contacts():
 
 @application.route('/freshdesk/Groups')
 def Groups():
-    a = API('moneyfellows.freshdesk.com', 'oH1IwmqZS7xH6tdGlW4p')
+    a = API(Freshdesk_URL, Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.groups.list_groups()
@@ -123,7 +124,7 @@ def Groups():
     return res
 @application.route('/freshdesk/Agents')
 def Agents():
-    a = API('moneyfellows.freshdesk.com', 'oH1IwmqZS7xH6tdGlW4p')
+    a = API(Freshdesk_URL, Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.agents.list_agents()
@@ -146,7 +147,7 @@ def Agents():
 def Comments():
     rows_list = []
     rows_list_2 = []
-    a = API('moneyfellows.freshdesk.com', 'oH1IwmqZS7xH6tdGlW4p')
+    a = API(Freshdesk_URL, Freshdesk_Key)
     s = a.tickets.list_tickets(filter_name=None, updated_since= z)
     try:
         for row in s:
@@ -176,29 +177,29 @@ def Comments():
 @application.route('/appsflyer/In-app-events')
 def Events():
     try:
-        ios_non_organic_in_app = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_non_organic_in_app = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "in_app_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_non_organic_in_app)
-        ios_organic_in_app = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_organic_in_app = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "organic_in_app_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_organic_in_app)
-        android_non_organic_in_app = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_non_organic_in_app = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "in_app_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(android_non_organic_in_app)
-        android_organic_in_app = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_organic_in_app = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "organic_in_app_events_report",
         from_date =  yesterday,
@@ -213,29 +214,29 @@ def Events():
 @application.route('/appsflyer/Installs')
 def Installs():
     try:
-        ios_non_organic_installs = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_non_organic_installs = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "installs_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_non_organic_installs)
-        ios_organic_installs = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_organic_installs = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "organic_installs_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_organic_installs)
-        android_non_organic_installs = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_non_organic_installs = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "installs_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(android_non_organic_installs)
-        android_organic_installs = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_organic_installs = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "organic_installs_report",
         from_date =  yesterday,
@@ -246,34 +247,34 @@ def Installs():
         res = jsonify(res) 
     except:
         res  = jsonify({'result':'Empty'})
-    return 
+    return res
 
 @application.route('/appsflyer/Uninstalls')
 def Uninstalls():
     try:
-        ios_non_organic_uninstalls = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_non_organic_uninstalls = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "uninstall_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_non_organic_uninstalls)
-        ios_organic_uninstalls = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        ios_organic_uninstalls = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "id1113492041"   ,     
         report_name = "organic_uninstall_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(ios_organic_uninstalls)
-        android_non_organic_uninstalls = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_non_organic_uninstalls = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "uninstall_events_report",
         from_date =  yesterday,
         to_date = yesterday)
         print(android_non_organic_uninstalls)
-        android_organic_uninstalls = AppsFlyerApi(api_endpoint = "https://hq.appsflyer.com/export/",
-        api_token = "a0e8dc8b-8c1c-4131-b9b0-cd70b458da6b" ,
+        android_organic_uninstalls = AppsFlyerApi(api_endpoint =Appsflyer_url,
+        api_token = Appsflyer_key ,
         app_id = "com.moneyfellows.mobileapp"   ,     
         report_name = "organic_uninstall_events_report",
         from_date =  yesterday,
@@ -328,8 +329,8 @@ def Queue_Details():
 
 @application.route('/freshchat/Conversation-Created')
 def Conversation_Created():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -342,7 +343,7 @@ def Conversation_Created():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -359,8 +360,8 @@ def Conversation_Created():
 
 @application.route('/freshchat/Conversation-Created/<int:day>')
 def Conversation_Created_day(day):
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -374,7 +375,7 @@ def Conversation_Created_day(day):
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -389,8 +390,8 @@ def Conversation_Created_day(day):
     return jsonify(res)
 @application.route('/freshchat/Conversation-Agent-Assigned')
 def Conversation_Agent_Assigned():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -403,7 +404,7 @@ def Conversation_Agent_Assigned():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -420,8 +421,8 @@ def Conversation_Agent_Assigned():
 
 @application.route('/freshchat/Conversation-Agent-Assigned/<int:day>')
 def Conversation_Agent_Assigned_day(day):
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -435,7 +436,7 @@ def Conversation_Agent_Assigned_day(day):
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -451,8 +452,8 @@ def Conversation_Agent_Assigned_day(day):
 
 @application.route('/freshchat/Conversation_Resolved')
 def Conversation_Resolved():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -465,7 +466,7 @@ def Conversation_Resolved():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -481,8 +482,8 @@ def Conversation_Resolved():
     return jsonify(res)
 @application.route('/freshchat/Message-Sent')
 def Message_Sent():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -495,7 +496,7 @@ def Message_Sent():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -512,8 +513,8 @@ def Message_Sent():
 
 @application.route('/freshchat/Conversation-Group-Assigned')
 def Conversation_Group_Assigned():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -526,7 +527,7 @@ def Conversation_Group_Assigned():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -543,8 +544,8 @@ def Conversation_Group_Assigned():
 
 @application.route('/freshchat/Agent-Activity')
 def Agent_Activity():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -557,7 +558,7 @@ def Agent_Activity():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -573,8 +574,8 @@ def Agent_Activity():
     return jsonify(res)
 @application.route('/freshchat/First-Response-Time')
 def First_Response_Time():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -587,7 +588,7 @@ def First_Response_Time():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -604,8 +605,8 @@ def First_Response_Time():
 
 @application.route('/freshchat/Response-Time')
 def Response_Time():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -618,7 +619,7 @@ def Response_Time():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -635,8 +636,8 @@ def Response_Time():
 
 @application.route('/freshchat/Resolution-Time')
 def Resolution_Time():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -649,7 +650,7 @@ def Resolution_Time():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
@@ -666,8 +667,8 @@ def Resolution_Time():
 
 @application.route('/freshchat/Agent-Intelliassign-Activity')
 def Agent_Intelliassign_Activity():
-    url = Freshdesk_URL
-    API_KEY =Freshdesk_Key
+    url = Freshchat_URL
+    API_KEY =Freshchat_Key
     session = requests.Session()
     session.headers['Authorization'] = API_KEY
     session.headers['Accept'] = "application/json"
@@ -680,7 +681,7 @@ def Agent_Intelliassign_Activity():
 
 
     time.sleep(30)
-    url = Freshdesk_URL + k
+    url = Freshchat_URL + k
     response = session.get(url)
     m = str(response.content)
     print(m)
