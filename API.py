@@ -65,7 +65,7 @@ def home():
 
 @application.route('/freshdesk/Tickets')
 def Tickets():
-    a = API(Freshdesk_URL, Freshdesk_Key)
+    a = API('moneyfellows.freshdesk.com', Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.tickets.list_tickets(filter_name=None, updated_since= z)
@@ -85,7 +85,7 @@ def Tickets():
 
 @application.route('/freshdesk/Contacts')
 def Contacts():
-    a = API(Freshdesk_URL, Freshdesk_Key)
+    a = API('moneyfellows.freshdesk.com', Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.contacts.list_contacts(filter_name=None, _updated_since= x)
@@ -105,7 +105,7 @@ def Contacts():
 
 @application.route('/freshdesk/Groups')
 def Groups():
-    a = API(Freshdesk_URL, Freshdesk_Key)
+    a = API('moneyfellows.freshdesk.com', Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.groups.list_groups()
@@ -124,7 +124,7 @@ def Groups():
     return res
 @application.route('/freshdesk/Agents')
 def Agents():
-    a = API(Freshdesk_URL, Freshdesk_Key)
+    a = API('moneyfellows.freshdesk.com', Freshdesk_Key)
     rows_list = []
     #query = "(status:2 OR status:'3' OR status:'4' OR status:'5' )"
     s = a.agents.list_agents()
@@ -147,7 +147,7 @@ def Agents():
 def Comments():
     rows_list = []
     rows_list_2 = []
-    a = API(Freshdesk_URL, Freshdesk_Key)
+    a = API('moneyfellows.freshdesk.com', Freshdesk_Key)
     s = a.tickets.list_tickets(filter_name=None, updated_since= z)
     try:
         for row in s:
