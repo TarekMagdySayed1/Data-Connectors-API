@@ -17,7 +17,12 @@ def convert(x):
     except:
         return x.replace('None', '2015-01-01')
 
-
+def get_interval_string(follow):
+        """Function takes no paramters and returns an time interval in json format"""
+        if follow == 'Yesterday':
+            yesterday = datetime.now() - timedelta(1)
+       
+        return yesterday.strftime('%Y-%m-%d') + 'T03:00:01' + '/' + yesterday.strftime('%Y-%m-%d') + 'T23:30:00', yesterday.strftime('%Y-%m-%d') + 'T03:00:01' + '/' + yesterday.strftime('%Y-%m-%d') + 'T23:30:00', yesterday.strftime('%Y-%m-%d') + 'T03:00:01' + '/' + yesterday.strftime('%Y-%m-%d') + 'T23:30:00'
 def get_interval_string_2(follow):
         """Function takes no paramters and returns an time interval in json format"""
         if follow == 'Yesterday':
@@ -115,10 +120,10 @@ def split_date(dt):
 def KPIs(AgentID):
     region = PureCloudPlatformClientV2.PureCloudRegionHosts.eu_west_1
     PureCloudPlatformClientV2.configuration.host = region.get_api_host()
-    apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token(Gen_Token, Gen_Pass)
+    apiClient = PureCloudPlatformClientV2.api_client.ApiClient().get_client_credentials_token("22037ef3-da13-4e54-bf63-b2bfe95e9b95", "0PAAYpnG4fFkB4RcoAqL8MQupKaZkYQQH5yc701Fz7c")
     api_instance = PureCloudPlatformClientV2.AnalyticsApi(apiClient)
     body = PureCloudPlatformClientV2.UserDetailsQuery()
-    x = get_interval_string_2('Yesterday')
+    x,y,z = get_interval_string('Yesterday')
     body = {
       "interval": x,
       "userFilters": [
@@ -139,11 +144,53 @@ def KPIs(AgentID):
     "pageNumber": 1
   }
     }
+    body_2 = {
+      "interval": y,
+      "userFilters": [
+          {
+            "type": "or",
+            "predicates": [
+                {
+                    "dimension": "userId",
+                    "value": AgentID
+                }
+            ]
+          }
+      ],
+      "paging": {
+    "pageSize": 100,
+    "pageNumber": 2
+  }
+      
+      
+      
+    }
     
+    body_3 = {
+      "interval": z,
+      "userFilters": [
+          {
+            "type": "or",
+            "predicates": [
+                {
+                    "dimension": "userId",
+                    "value": AgentID
+                }
+            ]
+          }
+      ],
+      
+      "paging": {
+    "pageSize": 100,
+    "pageNumber": 3
+  }
+      
+    }
     
     try:
         api_response = api_instance.post_analytics_users_details_query(body)
-        
+        api_response_2 = api_instance.post_analytics_users_details_query(body_2)
+        api_response_3 = api_instance.post_analytics_users_details_query(body_3)
         
        
         lst =[]
@@ -166,7 +213,64 @@ def KPIs(AgentID):
             Abanoub['start_time'] = Abanoub['start_time'].dt.tz_convert('Etc/GMT-2')
             Abanoub['end_time'] = Abanoub['end_time'].dt.tz_convert('Etc/GMT-2')
             print(len(Abanoub))
-            
+            try:
+                for row in api_response_2.user_details[0].primary_presence:
+                    #print(row)
+                    lst_2.append(ast.literal_eval(((str(row)).replace(", tzinfo=tzutc()", "").replace("datetime.datetime","'")).replace(")",")'").replace('\n','').replace("None", "'None'")))
+                    #print(ast.literal_eval(((str(row)).replace(", tzinfo=tzutc()", "").replace("datetime.datetime","'")).replace(")",")'").replace('\n','').replace("None", "'None'")))
+                Abanoub_2 = pd.DataFrame(lst_2)
+                #print(Abanoub_2)
+                Abanoub_2['start_time'] = Abanoub_2['start_time'].apply(lambda x:convert(x))
+                Abanoub_2['end_time'] = Abanoub_2['end_time'].apply(lambda x:convert(x))
+                Abanoub_2['start_time'] = pd.to_datetime(Abanoub_2['start_time'])
+                Abanoub_2['end_time'] = pd.to_datetime(Abanoub_2['end_time'])
+                Abanoub_2['start_time'] = Abanoub_2['start_time'].fillna(pd.to_datetime('2015-01-01'))
+                Abanoub_2['end_time'] = Abanoub_2['end_time'].fillna(pd.to_datetime('2015-01-01'))
+                Abanoub_2['start_time'] = Abanoub_2['start_time'].dt.tz_localize('Etc/GMT')
+                Abanoub_2['end_time'] = Abanoub_2['end_time'].dt.tz_localize('Etc/GMT')
+                Abanoub_2['end_time'] = Abanoub_2['end_time'].dt.tz_convert('Etc/GMT')
+                Abanoub_2['start_time'] = Abanoub_2['start_time'].dt.tz_convert('Etc/GMT-2')
+                Abanoub_2['end_time'] = Abanoub_2['end_time'].dt.tz_convert('Etc/GMT-2')
+                print(len(Abanoub_2))
+    
+                Abanoub = ps.sqldf(""" select *
+                                    from Abanoub
+                                    union 
+                                    select *
+                                    from Abanoub_2
+                                    
+                                    """)
+            except:
+                Abanoub = Abanoub
+            try:
+                for row in api_response_3.user_details[0].primary_presence:
+                    #print(row)
+                    lst_3.append(ast.literal_eval(((str(row)).replace(", tzinfo=tzutc()", "").replace("datetime.datetime","'")).replace(")",")'").replace('\n','').replace("None", "'None'")))
+                    #print(ast.literal_eval(((str(row)).replace(", tzinfo=tzutc()", "").replace("datetime.datetime","'")).replace(")",")'").replace('\n','').replace("None", "'None'")))
+                Abanoub_3 = pd.DataFrame(lst_3)
+                #print(Abanoub_2)
+                Abanoub_3['start_time'] = Abanoub_3['start_time'].apply(lambda x:convert(x))
+                Abanoub_3['end_time'] = Abanoub_3['end_time'].apply(lambda x:convert(x))
+                Abanoub_3['start_time'] = pd.to_datetime(Abanoub_3['start_time'])
+                Abanoub_3['end_time'] = pd.to_datetime(Abanoub_3['end_time'])
+                Abanoub_3['start_time'] = Abanoub_3['start_time'].fillna(pd.to_datetime('2015-01-01'))
+                Abanoub_3['end_time'] = Abanoub_3['end_time'].fillna(pd.to_datetime('2015-01-01'))
+                Abanoub_3['start_time'] = Abanoub_3['start_time'].dt.tz_localize('Etc/GMT')
+                Abanoub_3['end_time'] = Abanoub_3['end_time'].dt.tz_localize('Etc/GMT')
+                Abanoub_3['end_time'] = Abanoub_3['end_time'].dt.tz_convert('Etc/GMT')
+                Abanoub_3['start_time'] = Abanoub_3['start_time'].dt.tz_convert('Etc/GMT-2')
+                Abanoub_3['end_time'] = Abanoub_3['end_time'].dt.tz_convert('Etc/GMT-2')
+                print(len(Abanoub_3))
+    
+                Abanoub = ps.sqldf(""" select *
+                                    from Abanoub
+                                    union 
+                                    select *
+                                    from Abanoub_3
+                                    
+                                    """)
+            except:
+                Abanoub = Abanoub
             
     
             query = PureCloudPlatformClientV2.ConversationAggregationQuery()
@@ -360,7 +464,7 @@ def KPIs(AgentID):
         
     return ALL_Data_4
 
-def get_interval_stringv2(follow):
+def get_interval_stringV2v2(follow):
     """Function takes no paramters and returns an time interval in json format"""
     if follow == 'Today':
         yesterday = datetime.now() - timedelta(0)
@@ -584,13 +688,13 @@ def reformating(sec):
 
 def upload():
     new_list = []
-    full_data_user_Experience = queue_dataframe('Customer Experience',get_interval_stringv2('Yesterday'))
-    full_data_contract_Management = queue_dataframe('Contracts Management',get_interval_stringv2('Yesterday'))
+    full_data_user_Experience = queue_dataframe('Customer Experience',get_interval_stringV2v2('Yesterday'))
+    full_data_contract_Management = queue_dataframe('Contracts Management',get_interval_stringV2v2('Yesterday'))
     if full_data_user_Experience.columns[0] == 'Contracts Management':
         return full_data_user_Experience
     else:
         All_data = merge_queues(full_data_user_Experience,full_data_contract_Management)
-        All_data['outbounds'] = query_builder_outbound(['a4745fac-b854-4d3a-b34c-248f9ee8436d','6f8ea04a-b324-40e4-9e3c-1c6bf1939fed','80d86ba8-7b92-4f81-b388-5848818a738c','8c395417-fd7f-41cb-b700-09f30fee9cb7','a9567b17-a515-49a2-b179-da3d0057e6de','4eac2200-c655-44e0-87de-01d21d7c165f','e465d8a6-e580-4faa-86cf-e82c22040e6a','a1eaa298-2931-4d5e-b351-e6e291dedb29','2eb47365-bd65-40d6-b3a7-820c2a7f1aed'], ['tTalkComplete','nBlindTransferred', 'nConnected', 'nConsult', 'nConsultTransferred', 'nError', 'nOffered', 'nOutbound', 'nOutboundAbandoned', 'nOutboundAttempted', 'nOutboundConnected', 'nOverSla', 'nStateTransitionError', 'nTransferred', 'oExternalMediaCount', 'oMediaCount', 'oServiceLevel', 'oServiceTarget', 'tAbandon', 'tAcd', 'tAcw', 'tAgentResponseTime', 'tAlert', 'tAnswered', 'tContacting', 'tDialing', 'tFlowOut', 'tHandle', 'tHeld', 'tHeldComplete', 'tIvr', 'tMonitoring', 'tNotResponding', 'tShortAbandon', 'tTalk', 'tTalkComplete', 'tUserResponseTime', 'tVoicemail', 'tWait'], get_interval_stringv2(follow='Yesterday'))
+        All_data['outbounds'] = query_builder_outbound(['a4745fac-b854-4d3a-b34c-248f9ee8436d','6f8ea04a-b324-40e4-9e3c-1c6bf1939fed','80d86ba8-7b92-4f81-b388-5848818a738c','8c395417-fd7f-41cb-b700-09f30fee9cb7','a9567b17-a515-49a2-b179-da3d0057e6de','4eac2200-c655-44e0-87de-01d21d7c165f','e465d8a6-e580-4faa-86cf-e82c22040e6a','a1eaa298-2931-4d5e-b351-e6e291dedb29','2eb47365-bd65-40d6-b3a7-820c2a7f1aed'], ['tTalkComplete','nBlindTransferred', 'nConnected', 'nConsult', 'nConsultTransferred', 'nError', 'nOffered', 'nOutbound', 'nOutboundAbandoned', 'nOutboundAttempted', 'nOutboundConnected', 'nOverSla', 'nStateTransitionError', 'nTransferred', 'oExternalMediaCount', 'oMediaCount', 'oServiceLevel', 'oServiceTarget', 'tAbandon', 'tAcd', 'tAcw', 'tAgentResponseTime', 'tAlert', 'tAnswered', 'tContacting', 'tDialing', 'tFlowOut', 'tHandle', 'tHeld', 'tHeldComplete', 'tIvr', 'tMonitoring', 'tNotResponding', 'tShortAbandon', 'tTalk', 'tTalkComplete', 'tUserResponseTime', 'tVoicemail', 'tWait'], get_interval_stringV2v2(follow='Yesterday'))
         col_list = ['tAcda_x_x', 'tAbandon_x_x','Abandon %_x','tAcda_x_y','tAnswered_x','tAbandon_x_y','Abandon %_y','oServiceLe_y_x','tAcwa_x',	'tHandle_x',	'tHeldCompl_x',	'tTalkCompl_x','outbounds']
         for col in col_list:
             if col not in All_data.columns:
@@ -604,7 +708,7 @@ def upload():
                          'tAcda_x_y':'Contracts Management','tAbandon_x_y':'Contracts Abandoned',
                          'Abandon %_y':'Contracts Management Abandoned%','oServiceLe_y_x':'Service Level %',                            'tAnswered_x':'ASA','tTalkCompl_x':'Avg Talk', 'tAcwa_x':'Avg ACW',
                          'tHandle_x':'AHT','tHeldCompl_x':'Avg Hold',}, inplace=True)
-        All_data['Date'] = get_interval_stringv2('Yesterday')[:10]
+        All_data['Date'] = get_interval_stringV2v2('Yesterday')[:10]
         All_data = get_percentage(All_data, 'Contracts Management Abandoned%', 'Contracts Abandoned','Contracts Management')
         All_data = get_percentage(All_data, 'Customer Experience Abandoned%', 'Customer Abandoned','Customer Experience')
         All_data['Inbound Calls'] = All_data['Contracts Management'] + All_data['Customer Experience']

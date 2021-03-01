@@ -9,8 +9,8 @@ from zipfile import ZipFile
 from urllib.request import urlopen
 from freshdeskv5 import API
 from appsflyer import AppsFlyerApi
-from Genesys import KPIs
-from Genesys import upload
+from Genesys_User import KPIs
+from Gensys_Queue import upload
 import os
 
 #freshchatKey = os.environ['FreshChat_KEY']
@@ -289,31 +289,30 @@ def Uninstalls():
 
 @application.route('/Genesys/Users details')
 def User_Details():
-    try:
-        Abanoub_Nabil = KPIs('a4745fac-b854-4d3a-b34c-248f9ee8436d')
-        Abanoub_Nabil['name'] = 'Abanoub Nabil'
-        Huda_Aladdin = KPIs('6f8ea04a-b324-40e4-9e3c-1c6bf1939fed')
-        Huda_Aladdin['name'] = 'Huda Aladdin'
-        Mai_Mansour = KPIs('80d86ba8-7b92-4f81-b388-5848818a738c')
-        Mai_Mansour['name'] = 'Mai Mansour'
-        Hadier_Mahgoub = KPIs('8c395417-fd7f-41cb-b700-09f30fee9cb7')
-        Hadier_Mahgoub['name'] = 'Hadier Mahgoub'
-        Aya_Reda = KPIs('a9567b17-a515-49a2-b179-da3d0057e6de')
-        Aya_Reda['name'] = 'Aya Reda'
-        Fakher_Mahdy = KPIs('4eac2200-c655-44e0-87de-01d21d7c165f')
-        Fakher_Mahdy['name'] = 'Fakher Mahdy'
-        Sarah_Magdi = KPIs('e465d8a6-e580-4faa-86cf-e82c22040e6a')
-        Sarah_Magdi['name'] = 'Sarah Magdi'
-        Aliaa_Khaled = KPIs('a1eaa298-2931-4d5e-b351-e6e291dedb29')
-        Aliaa_Khaled['name'] = 'Aliaa Khaled'
-        Ibrahim_Samir = KPIs('2eb47365-bd65-40d6-b3a7-820c2a7f1aed')
-        Ibrahim_Samir['name'] = 'Ibrahim Samir'
-        
-        full_data = pd.concat([Abanoub_Nabil, Huda_Aladdin,Mai_Mansour,Hadier_Mahgoub,Aya_Reda,Aya_Reda,Fakher_Mahdy,Sarah_Magdi,Aliaa_Khaled,Ibrahim_Samir], ignore_index=True)
-        res = full_data.to_dict(orient='records')
-        res = jsonify(res) 
-    except:
-        res  = jsonify({'result':'Empty'})
+    
+    Abanoub_Nabil = KPIs('a4745fac-b854-4d3a-b34c-248f9ee8436d')
+    Abanoub_Nabil['name'] = 'Abanoub Nabil'
+    Huda_Aladdin = KPIs('6f8ea04a-b324-40e4-9e3c-1c6bf1939fed')
+    Huda_Aladdin['name'] = 'Huda Aladdin'
+    Mai_Mansour = KPIs('80d86ba8-7b92-4f81-b388-5848818a738c')
+    Mai_Mansour['name'] = 'Mai Mansour'
+    Hadier_Mahgoub = KPIs('8c395417-fd7f-41cb-b700-09f30fee9cb7')
+    Hadier_Mahgoub['name'] = 'Hadier Mahgoub'
+    Aya_Reda = KPIs('a9567b17-a515-49a2-b179-da3d0057e6de')
+    Aya_Reda['name'] = 'Aya Reda'
+    Fakher_Mahdy = KPIs('4eac2200-c655-44e0-87de-01d21d7c165f')
+    Fakher_Mahdy['name'] = 'Fakher Mahdy'
+    Sarah_Magdi = KPIs('e465d8a6-e580-4faa-86cf-e82c22040e6a')
+    Sarah_Magdi['name'] = 'Sarah Magdi'
+    Aliaa_Khaled = KPIs('a1eaa298-2931-4d5e-b351-e6e291dedb29')
+    Aliaa_Khaled['name'] = 'Aliaa Khaled'
+    Ibrahim_Samir = KPIs('2eb47365-bd65-40d6-b3a7-820c2a7f1aed')
+    Ibrahim_Samir['name'] = 'Ibrahim Samir'
+    
+    full_data = pd.concat([Abanoub_Nabil, Huda_Aladdin,Mai_Mansour,Hadier_Mahgoub,Aya_Reda,Aya_Reda,Fakher_Mahdy,Sarah_Magdi,Aliaa_Khaled,Ibrahim_Samir], ignore_index=True)
+    res = full_data.to_dict(orient='records')
+    res = jsonify(res) 
+    
     return res
 
 @application.route('/Genesys/Queue details')
@@ -697,8 +696,5 @@ def Agent_Intelliassign_Activity():
     return jsonify(res)
 
 
-
-        
-    
 if __name__ == "__main__":
  application.run()
