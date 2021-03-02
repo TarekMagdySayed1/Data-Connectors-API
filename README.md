@@ -7,9 +7,12 @@
   b- appsflyer/Installs: Get all the installs data (organic, non-orgainc, ios, android) that occurred in appsflyer in the last 24 hours
 
   c- appsflyer/Uninstalls: Get all the uninstalls data (organic, non-orgainc, ios, android) that occurred in appsflyer in the last 24 hours
+  
   sample response:
-  ```json
- {
+  
+```json
+[
+    {
         "Ad":NaN,
         "Ad ID":NaN,
         "Ad Type":NaN,
@@ -52,7 +55,7 @@
         "Customer User ID":NaN,
         "DMA": "None",
         "Device Type": "iPhone SE",
-        "Event Name": "af_Purchase",
+        "Event Name": "install",
         "Event Revenue":NaN,
         "Event Revenue Currency":NaN,
         "Event Revenue USD":NaN,
@@ -90,5 +93,100 @@
         "Sub Param 5":NaN,
         "Sub Site ID":NaN,
         "User Agent": "MoneyFellows/7.9.22.0 CFNetwork/1126 Darwin/19.5.0",
-        "WIFI": true} 
-        ```
+        "WIFI": true
+    },
+    {
+        "Ad":NaN,
+        "Ad ID":NaN,
+        "Ad Type":NaN,
+        "Adset": "FaslaPostFebruary2021",
+        "Adset ID":NaN,
+        "Advertising ID":NaN,
+        "Android ID":NaN,
+        "App ID": "id1113492041",
+        "App Name": "MoneyFellows",
+        "App Version": "7.9.22",
+        "AppsFlyer ID": "1614553889969-0192772",
+        "Attributed Touch Time": "2021-02-28 23:11:11",
+        "Attributed Touch Type": "click",
+        "Attribution Lookback": "7d",
+        "Bundle ID": "com.moneyfellows.moneyfellows",
+        "Campaign": "FaslaPostFebruary2021",
+        "Campaign ID":NaN,
+        "Carrier":NaN,
+        "Channel":NaN,
+        "City": "Talkha",
+        "Contributor 1 Campaign":NaN,
+        "Contributor 1 Media Source":NaN,
+        "Contributor 1 Partner":NaN,
+        "Contributor 1 Touch Time":NaN,
+        "Contributor 1 Touch Type":NaN,
+        "Contributor 2 Campaign":NaN,
+        "Contributor 2 Media Source":NaN,
+        "Contributor 2 Partner":NaN,
+        "Contributor 2 Touch Time":NaN,
+        "Contributor 2 Touch Type":NaN,
+        "Contributor 3 Campaign":NaN,
+        "Contributor 3 Media Source":NaN,
+        "Contributor 3 Partner":NaN,
+        "Contributor 3 Touch Time":NaN,
+        "Contributor 3 Touch Type":NaN,
+        "Cost Currency":NaN,
+        "Cost Model":NaN,
+        "Cost Value":NaN,
+        "Country Code": "EG",
+        "Customer User ID":NaN,
+        "DMA": "None",
+        "Device Type": "iPhone 6s",
+        "Event Name": "install",
+        "Event Revenue":NaN,
+        "Event Revenue Currency":NaN,
+        "Event Revenue USD":NaN,
+        "Event Source": "SDK",
+        "Event Time": "2021-02-28 23:22:00",
+        "Event Value":NaN,
+        "HTTP Referrer": "http://m.facebook.com",
+        "IDFA":NaN,
+        "IDFV": "019277B2-8E4A-4DE4-808C-13E9C4EF8981",
+        "IMEI":NaN,
+        "IP": "197.42.119.21",
+        "Install Time": "2021-02-28 23:22:00",
+        "Is Primary Attribution":NaN,
+        "Is Receipt Validated":NaN,
+        "Is Retargeting": false,
+        "Keywords":NaN,
+        "Language": "fr-EG",
+        "Media Source": "Social_facebook",
+        "OS Version": "14.4",
+        "Operator":NaN,
+        "Original URL": "https://moneyfellows.onelink.me/zsgo/f003c493?fbclid=IwAR2yhBmW-81APQHyVLwWVFWkbwENLk7PBuYSHOoziLEyf_vzs25r_owWEu0",
+        "Partner":NaN,
+        "Platform": "ios",
+        "Postal Code": "35681",
+        "Reengagement Window":NaN,
+        "Region": "AF",
+        "Retargeting Conversion Type":NaN,
+        "SDK Version": "v6.0.5",
+        "Site ID":NaN,
+        "State": "SUZ",
+        "Sub Param 1":NaN,
+        "Sub Param 2":NaN,
+        "Sub Param 3":NaN,
+        "Sub Param 4":NaN,
+        "Sub Param 5":NaN,
+        "Sub Site ID":NaN,
+        "User Agent": "MoneyFellows/7.9.22.0 CFNetwork/1220.1 Darwin/20.3.0",
+        "WIFI": true
+    }]
+```
+ 
+## Freshdesk End Points:
+
+  a. freshdesk/Tickets: Get all the tickets that have been created or updated in the last 24 hours
+  
+  b- freshdesk/Comments: Get all the contacts that have been created or updated in the last 24 hours
+
+  c- freshdesk/Groups: Get all the groups in freshdesk
+  
+  e- freshdesk/Groups: Get all the groups in freshdesk
+ 
