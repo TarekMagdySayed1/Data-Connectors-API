@@ -184,9 +184,9 @@
 
   a. freshdesk/Tickets: Get all the tickets that have been created or updated in the last 24 hours
   
-  b- freshdesk/Comments: Get all the contacts that have been created or updated in the last 24 hours
+  b- freshdesk/Comments: Get all the tickets' messages that have been created or updated in the last 24 hours
 
-  c- freshdesk/Groups: Get all the groups in freshdesk
+  c- freshdesk/Contacts: Get all the contacts in freshdesk that have been created or updated in the last 24 hours
   
   e- freshdesk/Groups: Get all the groups in freshdesk
  
