@@ -189,4 +189,17 @@
   c- freshdesk/Contacts: Get all the contacts in freshdesk that have been created or updated in the last 24 hours
   
   e- freshdesk/Groups: Get all the groups in freshdesk
+  
+  
+## Genesys End Points:
+
+  a. genesys/Users details: Get all the KPIs for each agent in the CS agents in the last 24 hours
+  
+  b- Genesys/Queue details: Get all the KPIs for the CS and Contract management Queues in the last 24 hours
+  
+## Freshchat End Points:
+
+  a. freshchat/Conversation-Created: Get all the information about the Conversations that have been created in the last 24 hours
+  
+  
  
