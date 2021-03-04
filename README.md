@@ -190,6 +190,8 @@
   
   e- freshdesk/Groups: Get all the groups in freshdesk
   
+  f- freshdesk/Agents: Get all the the Agents in freshdesk
+  
   
 ## Genesys End Points:
 
@@ -200,6 +202,14 @@
 ## Freshchat End Points:
 
   a. freshchat/Conversation-Created: Get all the information about the Conversations that have been created in the last 24 hours
+  
+  b. freshchat/Conversation_Resolved: Get all the information about the Conversations that have been resolved in the last 24 hours
+  
+  c. freshchat/Message-Sent: Get all the information about the Messages that have been sent in the last 24 hours
+  
+  d. freshchat/Conversation-Group-Assigned: Get all the information about the Conversations that have been assigned to the groups in the last 24 hours
+  
+  e. freshchat/Agent-Activity: Get all the information about the activity made by the agents in the last 24 hours
   
   
  
