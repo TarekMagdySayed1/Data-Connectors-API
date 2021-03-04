@@ -2,11 +2,11 @@
 
 ## AppsFlyer End Points:
 
-  a. appsflyer/In-app-events: Get all the events (organic, non-orgainc, ios, android) that occurred in appsflyer in the last 24 hours
+  a. appsflyer/In-app-events: Get all the events (organic, non-organic, ios, android) that occurred in appsflyer in the last 24 hours
   
-  b- appsflyer/Installs: Get all the installs data (organic, non-orgainc, ios, android) that occurred in appsflyer in the last 24 hours
+  b- appsflyer/Installs: Get all the installs data (organic, non-organic, ios, android) that occurred in appsflyer in the last 24 hours
 
-  c- appsflyer/Uninstalls: Get all the uninstalls data (organic, non-orgainc, ios, android) that occurred in appsflyer in the last 24 hours
+  c- appsflyer/Uninstalls: Get all the uninstalls data (organic, non-organic, ios, android) that occurred in appsflyer in the last 24 hours
   
   sample response:
   
@@ -186,11 +186,11 @@
   
   b- freshdesk/Comments: Get all the tickets' messages that have been created or updated in the last 24 hours
 
-  c- freshdesk/Contacts: Get all the contacts in freshdesk that have been created or updated in the last 24 hours
+  c- freshdesk/Contacts: Get all the contacts in Freshdesk that have been created or updated in the last 24 hours
   
-  e- freshdesk/Groups: Get all the groups in freshdesk
+  e- freshdesk/Groups: Get all the groups in Freshdesk
   
-  f- freshdesk/Agents: Get all the the Agents in freshdesk
+  f- freshdesk/Agents: Get all the Agents in Freshdesk
   
   
 ## Genesys End Points:
@@ -205,11 +205,19 @@
   
   b. freshchat/Conversation_Resolved: Get all the information about the Conversations that have been resolved in the last 24 hours
   
-  c. freshchat/Message-Sent: Get all the information about the Messages that have been sent in the last 24 hours
+  c. freshchat/Message-Sent: Get all the information about the messages that have been sent in the last 24 hours
   
   d. freshchat/Conversation-Group-Assigned: Get all the information about the Conversations that have been assigned to the groups in the last 24 hours
   
   e. freshchat/Agent-Activity: Get all the information about the activity made by the agents in the last 24 hours
+  
+  f. freshchat/First-Response-Time: Get all the information about the total time consumed by the agents to make the first conversation response in the last 24 hours
+  
+  g. freshchat/Response-Time: Get all the information about the total time consumed by the agents to make the conversation response in the last 24 hours
+  
+  h. freshchat/Resolution-Time: Get all the information about the total time consumed by the agents to make the resolve the conversation in the last 24 hours
+  
+  i. freshchat/Agent-Intelliassign-Activity: Get all the information about the activity made by the Intelliassign in the last 24 hours
   
   
  
